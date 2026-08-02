@@ -13,7 +13,7 @@ app = Flask(__name__)
 UPLOAD_FOLDER = "uploads"
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-app.secret_key = "my_secret_key_123"
+app.secret_key = os.getenv("SECRET_KEY", "dev-secret-key")
 
 client = genai.Client(api_key=GEMINI_API_KEY)
 
