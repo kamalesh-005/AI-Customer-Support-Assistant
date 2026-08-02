@@ -1,6 +1,28 @@
+# Virtual environments
 venv/
+.venv/
+venv312/
+
+# Python cache
 __pycache__/
 *.pyc
+
+# Environment variables
 .env
-instance/
+
+# Database
 *.db
+
+# Flask instance
+instance/
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Generated PDFs
+*.pdf
