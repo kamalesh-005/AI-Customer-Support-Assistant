@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="p-4 mb-4 rounded shadow bg-primary text-white">
+    <h2>👋 Welcome, {{ username }}</h2>
+    <p class="mb-0">
+        Manage your tickets, chat with AI, and track support requests from one dashboard.
+    </p>
+</div>
+
+<div class="row">
+
+    <!-- Total Chats -->
+    <div class="col-md-3 mb-3">
+        <div class="card shadow text-center">
+            <div class="card-body">
+                <h1>💬</h1>
+                <h4>{{ total_chats }}</h4>
+                <p>Total Chats</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Tickets -->
+    <div class="col-md-3 mb-3">
+        <div class="card shadow text-center">
+            <div class="card-body">
+                <h1>🎫</h1>
+                <h4>{{ total_tickets }}</h4>
+                <p>Support Tickets</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Responses -->
+    <div class="col-md-3 mb-3">
+        <div class="card shadow text-center">
+            <div class="card-body">
+                <h1>🤖</h1>
+                <h4>{{ total_ai_responses }}</h4>
+                <p>AI Responses</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Last Chat -->
+    <div class="col-md-3 mb-3">
+        <div class="card shadow text-center">
+            <div class="card-body">
+                <h1>🕒</h1>
+
+                {% if last_chat %}
+                    <h6>{{ last_chat[0] }}</h6>
+                {% else %}
+                    <h6>No Chats</h6>
+                {% endif %}
+
+                <p>Last Chat</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<hr>
+
+<h4>🚀 Quick Actions</h4>
+
+<div class="d-flex gap-3 flex-wrap mb-4">
+
+    <a href="/chat" class="btn btn-primary">
+        💬 Start Chat
+    </a>
+
+    <a href="/ticket" class="btn btn-success">
+        🎫 Create Ticket
+    </a>
+
+    <a href="/view_tickets" class="btn btn-warning">
+        📋 View Tickets
+    </a>
+
+    <a href="/profile" class="btn btn-info">
+        👤 Profile
+    </a>
+
+    <a href="/logout" class="btn btn-danger">
+        🚪 Logout
+    </a>
+
+</div>
+
+<hr>
+
+<h4>📊 Ticket Statistics</h4>
+
+<div class="row">
+
+    <div class="col-md-3 mb-3">
+        <div class="card shadow text-center border-primary">
+            <div class="card-body">
+                <h2>🔵</h2>
+                <h3>{{ open_count }}</h3>
+                <p>Open Tickets</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card shadow text-center border-danger">
+            <div class="card-body">
+                <h2>🔴</h2>
+                <h3>{{ in_progress_count }}</h3>
+                <p>In Progress</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card shadow text-center border-warning">
+            <div class="card-body">
+                <h2>🟡</h2>
+                <h3>{{ resolved_count }}</h3>
+                <p>Resolved</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card shadow text-center border-secondary">
+            <div class="card-body">
+                <h2>⚫</h2>
+                <h3>{{ closed_count }}</h3>
+                <p>Closed</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<hr>
+<hr>
+
+<h4>📈 Ticket Status Chart</h4>
+
+<div class="card shadow p-3 mb-4">
+    <canvas id="ticketChart"></canvas>
+</div>
+
+<h4>📋 Recent Tickets</h4>
+
+<table class="table table-dark table-striped table-hover">
+
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Priority</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    {% if recent_tickets %}
+
+        {% for ticket in recent_tickets %}
+
+        <tr>
+
+            <td>{{ ticket[0] }}</td>
+
+            <td>
+                {% if ticket[1] == "High" %}
+                    <span class="badge bg-danger">High</span>
+                {% elif ticket[1] == "Medium" %}
+                    <span class="badge bg-warning text-dark">Medium</span>
+                {% else %}
+                    <span class="badge bg-success">Low</span>
+                {% endif %}
+            </td>
+
+            <td>
+                {% if ticket[2] == "Open" %}
+                    <span class="badge bg-primary">Open</span>
+                {% elif ticket[2] == "In Progress" %}
+                    <span class="badge bg-danger">In Progress</span>
+                {% elif ticket[2] == "Resolved" %}
+                    <span class="badge bg-warning text-dark">Resolved</span>
+                {% elif ticket[2] == "Closed" %}
+                    <span class="badge bg-secondary">Closed</span>
+                {% else %}
+                    {{ ticket[2] }}
+                {% endif %}
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    {% else %}
+
+        <tr>
+            <td colspan="3" class="text-center">
+                No recent tickets found.
+            </td>
+        </tr>
+
+    {% endif %}
+
+    </tbody>
+
+</table>
+
+
+
+<script>
+const ctx = document.getElementById('ticketChart');
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Open', 'In Progress', 'Resolved', 'Closed'],
+        datasets: [{
+            label: 'Tickets',
+            data: [
+                {{ open_count }},
+                {{ in_progress_count }},
+                {{ resolved_count }},
+                {{ closed_count }}
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
+
+{% endblock %}

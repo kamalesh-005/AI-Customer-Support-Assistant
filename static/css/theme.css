@@ -1,0 +1,216 @@
+body{
+    transition:0.3s;
+}
+
+/* Dark Mode */
+
+body.dark-mode{
+    background:#121212;
+    color:#ffffff;
+}
+
+body.dark-mode .container{
+    color:white;
+}
+
+body.dark-mode .navbar{
+    background:#000 !important;
+}
+
+body.dark-mode .form-control{
+    background:#2b2b2b;
+    color:white;
+    border:1px solid #666;
+}
+
+body.dark-mode .form-control::placeholder{
+    color:#bbbbbb;
+}
+
+body.dark-mode label{
+    color:white;
+}
+
+body.dark-mode .form-check-label{
+    color:white;
+}
+
+body.dark-mode .card{
+    background:#222;
+    color:white;
+}
+
+body.dark-mode .btn-outline-light{
+    border-color:white;
+}
+
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode p{
+    color:white;
+}
+/* ---------------- Dashboard Cards ---------------- */
+
+.card{
+    border-radius:18px;
+    transition:0.3s ease;
+    box-shadow:0 4px 10px rgba(0,0,0,0.15);
+}
+
+.card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 10px 25px rgba(0,0,0,0.25);
+}
+
+/* Rounded Buttons */
+
+.btn{
+    border-radius:10px;
+}
+.card{
+    border:none;
+    border-radius:18px;
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 15px 35px rgba(0,0,0,.25);
+}
+
+.card h1{
+    font-size:50px;
+}
+
+.card h4{
+    font-weight:bold;
+}
+/* AI Response Formatting */
+
+.ai-response {
+    font-size: 16px;
+    line-height: 1.8;
+    word-wrap: break-word;
+}
+
+.ai-response h1,
+.ai-response h2,
+.ai-response h3,
+.ai-response h4,
+.ai-response h5,
+.ai-response h6 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.ai-response p {
+    margin-bottom: 12px;
+}
+
+.ai-response ul,
+.ai-response ol {
+    margin-left: 25px;
+    margin-bottom: 15px;
+}
+
+.ai-response li {
+    margin-bottom: 6px;
+}
+
+.ai-response strong {
+    color: #0d6efd;
+}
+
+.ai-response table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.ai-response table,
+.ai-response th,
+.ai-response td {
+    border: 1px solid #dee2e6;
+}
+
+.ai-response th,
+.ai-response td {
+    padding: 10px;
+    text-align: left;
+}
+
+.ai-response code {
+    background: #f8f9fa;
+    padding: 2px 5px;
+    border-radius: 5px;
+    font-family: Consolas, monospace;
+}
+
+.ai-response pre {
+    background: #212529;
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    overflow-x: auto;
+}
+
+.loader {
+  --color-1: #fff;
+  --size: 1px;
+
+  width: calc(48 * var(--size));
+  height: calc(48 * var(--size));
+  border: calc(5 * var(--size)) solid var(--color-1);
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  position: relative;
+  animation: pulse 1s linear infinite;
+}
+
+.loader:after {
+  content: '';
+  position: absolute;
+  width: calc(48 * var(--size));
+  height: calc(48 * var(--size));
+  border: calc(3 * var(--size)) solid var(--color-1);
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  animation: scaleUp 1s linear infinite;
+}
+
+@keyframes scaleUp {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+  }
+  60%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  60%,
+  100% {
+    transform: scale(1);
+  }
+  80% {
+    transform: scale(1.2);
+  }
+}
+
+#loadingSpinner{
+    padding:25px 0;
+    text-align:center;
+}
+
+#loadingSpinner .loader{
+    margin-bottom:15px;
+}

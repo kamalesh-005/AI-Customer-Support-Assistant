@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Ticket{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h2>✏ Edit Support Ticket</h2>
+
+    <form method="POST">
+
+        <div class="mb-3">
+            <label>Title</label>
+            <input type="text"
+                   name="title"
+                   class="form-control"
+                   value="{{ ticket[1] }}"
+                   required>
+        </div>
+
+        <div class="mb-3">
+            <label>Category</label>
+
+            <select name="category" class="form-control">
+
+                <option {% if ticket[2]=='Login' %}selected{% endif %}>Login</option>
+                <option {% if ticket[2]=='Technical' %}selected{% endif %}>Technical</option>
+                <option {% if ticket[2]=='Payment' %}selected{% endif %}>Payment</option>
+                <option {% if ticket[2]=='Account' %}selected{% endif %}>Account</option>
+                <option {% if ticket[2]=='Other' %}selected{% endif %}>Other</option>
+
+            </select>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Priority</label>
+
+            <select name="priority" class="form-control">
+
+                <option {% if ticket[3]=='Low' %}selected{% endif %}>Low</option>
+                <option {% if ticket[3]=='Medium' %}selected{% endif %}>Medium</option>
+                <option {% if ticket[3]=='High' %}selected{% endif %}>High</option>
+
+            </select>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Description</label>
+
+            <textarea name="description"
+                      class="form-control"
+                      rows="5">{{ ticket[4] }}</textarea>
+
+        </div>
+
+        <button type="submit" class="btn btn-success">
+            Update Ticket
+        </button>
+
+        <a href="/view_tickets" class="btn btn-secondary">
+            Cancel
+        </a>
+
+    </form>
+
+</div>
+
+{% endblock %}

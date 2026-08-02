@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+
+<h2 class="text-center mb-4">User Registration</h2>
+
+<form method="POST" id="registerForm">
+
+    <div class="mb-3">
+        <label>Full Name</label>
+        <input
+            type="text"
+            name="fullname"
+            class="form-control"
+            placeholder="Enter your full name"
+            required>
+    </div>
+
+    <div class="mb-3">
+        <label>Email</label>
+        <input
+            type="email"
+            name="email"
+            class="form-control"
+            placeholder="Enter your email"
+            required>
+    </div>
+
+    <div class="mb-3">
+        <label>Password</label>
+
+        <input
+            type="password"
+            id="registerPassword"
+            name="password"
+            class="form-control"
+            placeholder="Create your password"
+            required>
+
+        <div class="form-check mt-2">
+            <input
+                class="form-check-input"
+                type="checkbox"
+                id="showRegisterPassword">
+
+            <label class="form-check-label">
+                Show Password
+            </label>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success w-100">
+        Register
+    </button>
+
+</form>
+
+<script>
+
+// Show Password
+document.getElementById("showRegisterPassword").addEventListener("change", function () {
+
+    let pass = document.getElementById("registerPassword");
+
+    pass.type = this.checked ? "text" : "password";
+
+});
+
+// Email Validation
+document.getElementById("registerForm").addEventListener("submit", function (event) {
+
+    let email = document.querySelector('input[name="email"]').value.trim();
+
+    let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailPattern.test(email)) {
+        event.preventDefault();
+        alert("❌ Please enter a valid email address.\nExample: kamalesh@gmail.com");
+    }
+
+});
+
+</script>
+
+{% endblock %}

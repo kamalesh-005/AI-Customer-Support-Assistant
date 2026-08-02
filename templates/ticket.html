@@ -1,0 +1,60 @@
+<div class="container mt-5">
+
+    <h2>Create Support Ticket</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+
+        <div class="mb-3">
+            <label>Ticket Title</label>
+            <input type="text" name="title" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Category</label>
+            <select name="category" class="form-control">
+                <option>Login</option>
+                <option>Technical</option>
+                <option>Payment</option>
+                <option>Account</option>
+                <option>Other</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label>Priority</label>
+            <select name="priority" class="form-control">
+                <option>Low</option>
+                <option>Medium</option>
+                <option>High</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label>Description</label>
+            <textarea
+                name="description"
+                class="form-control"
+                rows="5"
+                required></textarea>
+        </div>
+        <div class="mb-3">
+
+    <label class="form-label">
+        📎 Attach File
+    </label>
+
+    <input
+        type="file"
+        name="attachment"
+        class="form-control"
+        accept=".png,.jpg,.jpeg,.pdf,.txt">
+
+</div>
+
+        <button class="btn btn-success">
+            Submit Ticket
+        </button>
+
+    </form>
+
+</div>

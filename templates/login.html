@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+<h2 class="text-center mb-4">User Login</h2>
+
+<form method="POST">
+
+    <div class="mb-3">
+        <label>Email</label>
+        <input
+            type="email"
+            name="email"
+            class="form-control"
+            placeholder="Enter your email"
+            required>
+    </div>
+
+    <div class="mb-3">
+
+        <label>Password</label>
+
+        <input
+            type="password"
+            id="loginPassword"
+            name="password"
+            class="form-control"
+            placeholder="Enter your password"
+            required>
+
+        <div class="form-check mt-2">
+            <input
+                class="form-check-input"
+                type="checkbox"
+                id="showPassword">
+
+            <label class="form-check-label">
+                Show Password
+            </label>
+        </div>
+
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">
+        Login
+    </button>
+
+    <div class="text-center mt-3">
+        <a href="#" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">
+            Forgot Password?
+        </a>
+    </div>
+
+</form>
+
+<script>
+document.getElementById("showPassword").addEventListener("change", function () {
+    const pass = document.getElementById("loginPassword");
+    pass.type = this.checked ? "text" : "password";
+});
+</script>
+
+<!-- Forgot Password Modal -->
+
+<div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-hidden="true">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+                    Forgot Password
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <form method="POST" action="/send_otp">
+
+                    <div class="mb-3">
+
+                        <label>Email</label>
+
+                        <input
+                            type="email"
+                            name="email"
+                            class="form-control"
+                            placeholder="Enter your registered email"
+                            required>
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary w-100">
+
+                        Send OTP
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
