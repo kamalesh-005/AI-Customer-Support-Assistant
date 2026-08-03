@@ -9,6 +9,8 @@ from config import GEMINI_API_KEY
 from pdf_export import export_chat_to_pdf
 from werkzeug.utils import secure_filename
 
+import database
+
 app = Flask(__name__)
 UPLOAD_FOLDER = "uploads"
 
