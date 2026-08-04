@@ -144,9 +144,16 @@
 <hr>
 <hr>
 
+
 <h4>📈 Ticket Status Chart</h4>
 
 <div class="card shadow p-3 mb-4">
+
+     <p>Open: {{ open_count }}</p>
+<p>In Progress: {{ in_progress_count }}</p>
+<p>Resolved: {{ resolved_count }}</p>
+<p>Closed: {{ closed_count }}</p>
+   
     <canvas id="ticketChart"></canvas>
 </div>
 

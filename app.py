@@ -8,8 +8,17 @@ from google import genai
 from config import GEMINI_API_KEY
 from pdf_export import export_chat_to_pdf
 from werkzeug.utils import secure_filename
+from flask import session
 
 import database
+from config import EMAIL_ADDRESS, EMAIL_PASSWORD
+
+print("Email:", EMAIL_ADDRESS)
+print("Password Loaded:", EMAIL_PASSWORD is not None)
+
+import smtplib
+from email.mime.text import MIMEText
+from config import EMAIL_ADDRESS, EMAIL_PASSWORD
 
 app = Flask(__name__)
 UPLOAD_FOLDER = "uploads"
@@ -106,6 +115,43 @@ Customer Message:
         return chatbot_response(message)
 
 
+def send_otp_email(receiver_email, otp):
+
+    subject = "AI Customer Support - Email Verification OTP"
+
+    body = f"""
+Hello,
+
+Your OTP for AI Customer Support Assistant is:
+
+{otp}
+
+This OTP is valid for 5 minutes.
+
+If you did not request this, please ignore this email.
+
+Thank you,
+AI Customer Support Team
+"""
+
+    message = MIMEText(body)
+    message["Subject"] = subject
+    message["From"] = EMAIL_ADDRESS
+    message["To"] = receiver_email
+
+    try:
+        with smtplib.SMTP("smtp.gmail.com", 587) as server:
+            server.starttls()
+            server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+            server.send_message(message)
+
+        return True
+
+    except Exception as e:
+        print("Email Error:", e)
+        return False
+
+
 # ---------------- HOME ---------------- #
 
 @app.route("/")
@@ -148,6 +194,11 @@ def login():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    print("Method:", request.method)
+
+    if request.method == "POST":
+
+        print("Inside POST")
 
     if request.method == "POST":
 
@@ -169,18 +220,48 @@ def register():
         cursor = connection.cursor()
 
         cursor.execute(
-            "INSERT INTO users(fullname, email, password) VALUES (?, ?, ?)",
-            (fullname, email, password)
+            "SELECT * FROM users WHERE email=?",
+            (email,)
         )
 
-        connection.commit()
+        existing_user = cursor.fetchone()
+
         connection.close()
 
-        return redirect("/login")
+        if existing_user:
+            return """
+            <script>
+                alert("Email is already registered!");
+                window.history.back();
+            </script>
+            """
 
+        otp = str(random.randint(100000, 999999))
+
+        session["pending_user"] = {
+            "fullname": fullname,
+            "email": email,
+            "password": password,
+            "otp": otp
+        }
+
+
+
+        print("Generated OTP:", otp)
+
+        result = send_otp_email(email, otp)
+        print("Email sent:", result)
+
+    if result:
+        return redirect("/verify_otp")
+    else:
+        return """
+    <script>
+        alert("Failed to send OTP. Please try again.");
+        window.history.back();
+      </script>
+       """
     return render_template("register.html")
-
-
 # ---------------- DASHBOARD ---------------- #
 
 @app.route("/dashboard")
@@ -426,8 +507,8 @@ def chat():
         search=search
     )
 
+
 # ---------------- CHAT API ---------------- #
-from flask import jsonify
 
 @app.route("/chat_api", methods=["POST"])
 def chat_api():
@@ -478,7 +559,6 @@ def chat_api():
         "ai_reply": ai_reply,
         "time": current_time
     })
-
 
 
 # ---------------- DELETE CHAT ---------------- #
@@ -843,6 +923,17 @@ def logout():
     session.clear()
 
     return redirect("/")
+
+
+@app.route("/test_email")
+def test_email():
+
+    otp = "123456"
+
+    if send_otp_email("YOUR_EMAIL@gmail.com", otp):
+        return "Email sent successfully!"
+
+    return "Failed to send email."
 
 
 # ---------------- RUN APP ---------------- #

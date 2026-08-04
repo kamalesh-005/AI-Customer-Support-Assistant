@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-5" style="max-width:500px;">
+
+    <div class="card shadow">
+
+        <div class="card-header text-center">
+            <h3>Email Verification</h3>
+        </div>
+
+        <div class="card-body">
+
+            <p class="text-center">
+                We've sent a 6-digit OTP to your email.
+            </p>
+
+            <form method="POST" action="/verify_otp">
+
+                <div class="mb-3">
+                    <label class="form-label">Enter OTP</label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="otp"
+                        maxlength="6"
+                        required
+                    >
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary w-100">
+                    Verify OTP
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
