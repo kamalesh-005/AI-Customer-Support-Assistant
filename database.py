@@ -72,6 +72,41 @@ except sqlite3.OperationalError:
     # Column already exists
     pass
 
+# Delete all existing sample tickets
+cursor.execute("DELETE FROM tickets")
+
+
+sample_tickets = [
+
+    # Open
+    ("Login Issue", "Account", "High", "User cannot login", "Open"),
+    ("Payment Failed", "Billing", "Medium", "Payment not processed", "Open"),
+    ("Profile Update", "Profile", "Low", "Unable to update profile", "Open"),
+
+    # In Progress
+    ("Password Reset", "Account", "High", "Forgot password", "In Progress"),
+    ("Bug Report", "Technical", "Medium", "Application crashes", "In Progress"),
+    ("Email Verification", "Account", "Low", "OTP not received", "In Progress"),
+
+    # Resolved
+    ("Refund Request", "Billing", "High", "Refund completed", "Resolved"),
+    ("Account Unlock", "Account", "Medium", "Account unlocked", "Resolved"),
+    ("Ticket Update", "Support", "Low", "Issue resolved", "Resolved"),
+
+    # Closed
+    ("Feature Request", "General", "Low", "Dark mode added", "Closed"),
+    ("Installation Help", "Technical", "Medium", "Software installed", "Closed"),
+    ("Chatbot Issue", "AI", "High", "AI response fixed", "Closed"),
+]
+
+cursor.executemany("""
+INSERT INTO tickets(title, category, priority, description, status)
+VALUES (?, ?, ?, ?, ?)
+""", sample_tickets)
+
+cursor.execute("SELECT status, COUNT(*) FROM tickets GROUP BY status")
+print(cursor.fetchall())
+
 connection.commit()
 connection.close()
 

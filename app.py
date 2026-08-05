@@ -189,16 +189,9 @@ def login():
 
     return render_template("login.html")
 
-
 # ---------------- REGISTER ---------------- #
-
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    print("Method:", request.method)
-
-    if request.method == "POST":
-
-        print("Inside POST")
 
     if request.method == "POST":
 
@@ -206,6 +199,7 @@ def register():
         email = request.form["email"]
         password = request.form["password"]
 
+        # Email validation
         email_pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
 
         if not re.match(email_pattern, email):
@@ -219,6 +213,7 @@ def register():
         connection = sqlite3.connect("support.db")
         cursor = connection.cursor()
 
+        # Check existing user
         cursor.execute(
             "SELECT * FROM users WHERE email=?",
             (email,)
@@ -226,9 +221,9 @@ def register():
 
         existing_user = cursor.fetchone()
 
-        connection.close()
-
         if existing_user:
+            connection.close()
+
             return """
             <script>
                 alert("Email is already registered!");
@@ -236,31 +231,22 @@ def register():
             </script>
             """
 
-        otp = str(random.randint(100000, 999999))
+        # Register directly (No OTP)
+        cursor.execute("""
+            INSERT INTO users(fullname, email, password)
+            VALUES (?, ?, ?)
+        """, (fullname, email, password))
 
-        session["pending_user"] = {
-            "fullname": fullname,
-            "email": email,
-            "password": password,
-            "otp": otp
-        }
+        connection.commit()
+        connection.close()
 
-
-
-        print("Generated OTP:", otp)
-
-        result = send_otp_email(email, otp)
-        print("Email sent:", result)
-
-    if result:
-        return redirect("/verify_otp")
-    else:
         return """
-    <script>
-        alert("Failed to send OTP. Please try again.");
-        window.history.back();
-      </script>
-       """
+        <script>
+            alert("Registration Successful!");
+            window.location='/login';
+        </script>
+        """
+
     return render_template("register.html")
 # ---------------- DASHBOARD ---------------- #
 

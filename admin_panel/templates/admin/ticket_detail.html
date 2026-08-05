@@ -1,0 +1,69 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Ticket #{{ ticket[0] }}{% endblock %}
+{% block page_title %}Ticket #{{ ticket[0] }}{% endblock %}
+
+{% block content %}
+
+<div class="admin-table-card" style="max-width: 720px;">
+
+    <div class="d-flex justify-content-between align-items-start mb-3">
+        <div>
+            <h5 class="mb-1">{{ ticket[1] }}</h5>
+            <span class="badge badge-status-{{ ticket[5] }}">{{ ticket[5] }}</span>
+        </div>
+        <a href="{{ url_for('admin.admin_tickets') }}" class="btn btn-sm btn-outline-secondary">← Back to Tickets</a>
+    </div>
+
+    <dl class="row mb-4">
+        <dt class="col-sm-3">User</dt>
+        <dd class="col-sm-9 text-muted">
+            N/A
+            <span class="text-muted small">(not tracked by current ticket schema)</span>
+        </dd>
+
+        <dt class="col-sm-3">Category</dt>
+        <dd class="col-sm-9">{{ ticket[2] }}</dd>
+
+        <dt class="col-sm-3">Priority</dt>
+        <dd class="col-sm-9">{{ ticket[3] }}</dd>
+
+        <dt class="col-sm-3">Description</dt>
+        <dd class="col-sm-9">{{ ticket[4] }}</dd>
+
+        {% if ticket[6] %}
+        <dt class="col-sm-3">Attachment</dt>
+        <dd class="col-sm-9">{{ ticket[6] }}</dd>
+        {% endif %}
+    </dl>
+
+    <form method="POST" class="row g-2 align-items-end">
+        <div class="col-md-6">
+            <label class="form-label">Change Status</label>
+            <select name="status" class="form-select">
+                {% for s in statuses %}
+                <option value="{{ s }}" {% if ticket[5] == s %}selected{% endif %}>{{ s }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary w-100">Update Status</button>
+        </div>
+    </form>
+
+    <hr>
+
+    <div class="d-flex gap-2">
+        <a href="{{ url_for('admin.admin_resolve_ticket', ticket_id=ticket[0]) }}"
+           class="btn btn-success btn-sm">Mark Resolved</a>
+
+        <a href="{{ url_for('admin.admin_delete_ticket', ticket_id=ticket[0]) }}"
+           class="btn btn-outline-danger btn-sm"
+           onclick="return confirm('Delete this ticket? This cannot be undone.');">
+            Delete Ticket
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}
