@@ -9,6 +9,7 @@ from config import GEMINI_API_KEY
 from pdf_export import export_chat_to_pdf
 from werkzeug.utils import secure_filename
 from flask import session
+from admin_panel.admin.routes import admin_bp
 
 import database
 from config import EMAIL_ADDRESS, EMAIL_PASSWORD
@@ -25,6 +26,8 @@ UPLOAD_FOLDER = "uploads"
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.secret_key = os.getenv("SECRET_KEY", "dev-secret-key")
+
+app.register_blueprint(admin_bp)
 
 client = genai.Client(api_key=GEMINI_API_KEY)
 
